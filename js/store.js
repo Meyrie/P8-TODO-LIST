@@ -82,12 +82,13 @@
 
 		
 		// Generate an ID
-	    var newId = new Date(); 
+		var	newId = ""
+	    var d = new Date(); 
 
         for (var i = 0; i < 6; i++) {
-     		newId += newId.getTime();
+     		newId += d.getTime();
 		}
-
+console.log(newId)
 		// If an ID was actually given, find the item and update each property
 		if (id) {
 			for (var i = 0; i < todos.length; i++) {
