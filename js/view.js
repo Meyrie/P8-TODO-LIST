@@ -5,6 +5,8 @@
 
 	/**
 	     * View that abstracts away the browser's DOM completely.
+		 *  Définit les valeurs par défaut du template
+
 	     * It has two simple entry points:
 	     *
 	     *   - bind(eventName, handler)
@@ -26,6 +28,9 @@
 		this.$toggleAll = qs('.toggle-all');
 		this.$newTodo = qs('.new-todo');
 	}
+	
+	// Supprime la Todo en fonction de l’ id.
+	// @param {number} (id) L' ID de l' élément à supprimer.
 
 	View.prototype._removeItem = function (id) {
 		var elem = qs('[data-id="' + id + '"]');
@@ -35,16 +40,29 @@
 		}
 	};
 
+/**
+	 * Masque les éléments terminés.
+	 * @param  {number} (completedCount) Le nombre d' élément coché.
+	 * @param  {bolean} (visible) True si visible, false sinon.
+	 */
 	View.prototype._clearCompletedButton = function (completedCount, visible) {
 		this.$clearCompleted.innerHTML = this.template.clearCompletedButton(completedCount);
 		this.$clearCompleted.style.display = visible ? 'block' : 'none';
 	};
-
+/**
+	 * Indique la page actuelle.
+	 * @param {string} (currentPage) La page actuelle peut avoir les valeures
+	 *                               '' || active || completed.
+	 */
 	View.prototype._setFilter = function (currentPage) {
 		qs('.filters .selected').className = '';
 		qs('.filters [href="#/' + currentPage + '"]').className = 'selected';
 	};
-
+/**
+	 * Test si l' élément' est terminé.
+	 * @param  {number} (id) L'ID de l'élément à tester.
+	 * @param  {bolean} (completed) Le statut de l' élément.
+	 */
 	View.prototype._elementComplete = function (id, completed) {
 		var listItem = qs('[data-id="' + id + '"]');
 
@@ -55,9 +73,15 @@
 		listItem.className = completed ? 'completed' : '';
 
 		// In case it was toggled from an event and not by clicking the checkbox
+		// Valider un élément en cochant la case
+
 		qs('input', listItem).checked = completed;
 	};
-
+/**
+	 * Permet l' édition d'un élément.
+	 * @param  {number} (id) L' ID de l' élément à éditer.
+	 * @param  {string} (title) Le contenu de la modification de l' élément.
+	 */
 	View.prototype._editItem = function (id, title) {
 		var listItem = qs('[data-id="' + id + '"]');
 
@@ -74,7 +98,11 @@
 		input.focus();
 		input.value = title;
 	};
-
+/**
+	 * Remplace l' ancien élément par l' élément édité.
+	 * @param  {number} (id)    L' ID de l' élément à éditer.
+	 * @param  {string} (title) Le contenu de le la modification de l' élément.
+	 */
 	View.prototype._editItemDone = function (id, title) {
 		var listItem = qs('[data-id="' + id + '"]');
 
@@ -91,40 +119,77 @@
 			label.textContent = title;
 		});
 	};
-
+/**
+	 * Retourne les éléments dans le DOM.
+	 * @param  {string} (viewCmd)   La fonction active.
+	 * @param  {object} (parameter) Les paramètres actifs.
+	 */
 	View.prototype.render = function (viewCmd, parameter) {
 		var self = this;
 		var viewCommands = {
+			/**
+			 * Affiche les éléments
+			 */
 			showEntries: function () {
 				self.$todoList.innerHTML = self.template.show(parameter);
 			},
+			/**
+			 * Supprime l' élément
+			 */
 			removeItem: function () {
 				self._removeItem(parameter);
 			},
+			/**
+			 * Met à jour le compteur
+			 */
 			updateElementCount: function () {
 				self.$todoItemCounter.innerHTML = self.template.itemCounter(parameter);
 			},
+			/**
+			 * Affiche le bouton 'clearCompleted'
+			 */
 			clearCompletedButton: function () {
 				self._clearCompletedButton(parameter.completed, parameter.visible);
 			},
+			/**
+			 * Vérifie la visibilité d' élément
+			 */
 			contentBlockVisibility: function () {
 				self.$main.style.display = self.$footer.style.display = parameter.visible ? 'block' : 'none';
 			},
+			/**
+			 * Affiche tous les éléments
+			 */
 			toggleAll: function () {
 				self.$toggleAll.checked = parameter.checked;
 			},
+			/**
+			 * Filtre les éléments
+			 */
 			setFilter: function () {
 				self._setFilter(parameter);
 			},
+			/**
+			 * Vide le contenu du nouveau todo dans l' input
+			 */
 			clearNewTodo: function () {
 				self.$newTodo.value = '';
 			},
+			/**
+			 * Affiche les éléments avec le statut completed
+			 */
 			elementComplete: function () {
 				self._elementComplete(parameter.id, parameter.completed);
 			},
+			/**
+			 * Permet d' éditer un élément
+			 */
 			editItem: function () {
 				self._editItem(parameter.id, parameter.title);
 			},
+			/**
+			 * Sauvegarde l' édition d' un élément
+			 */
 			editItemDone: function () {
 				self._editItemDone(parameter.id, parameter.title);
 			}
@@ -132,12 +197,18 @@
 
 		viewCommands[viewCmd]();
 	};
-
+/**
+	 * Ajoute un ID à l' élément.
+	 * @param  {object} (element) L' élément actif.
+	 */
 	View.prototype._itemId = function (element) {
 		var li = $parent(element, 'li');
 		return parseInt(li.dataset.id, 10);
 	};
-
+/**
+	 * EventListener sur la validation de l' édition d'un élément.
+	 * @param  {function} (handler) Un callback exécuté sous condition.
+	 */
 	View.prototype._bindItemEditDone = function (handler) {
 		var self = this;
 		$delegate(self.$todoList, 'li .edit', 'blur', function () {
@@ -153,11 +224,17 @@
 			if (event.keyCode === self.ENTER_KEY) {
 				// Remove the cursor from the input when you hit enter just like if it
 				// were a real form
+				/**
+			 * Retire le curseur du bouton lorsque l'on appuie sur Entrée.
+			 */
 				this.blur();
 			}
 		});
 	};
-
+/**
+	 * EventListener sur l' annulation de l' édition d'un élément.
+	 * @param  {function} (handler) Un callback exécuté sous condition.
+	 */
 	View.prototype._bindItemEditCancel = function (handler) {
 		var self = this;
 		$delegate(self.$todoList, 'li .edit', 'keyup', function (event) {
@@ -169,10 +246,18 @@
 			}
 		});
 	};
-
+/**
+	 * Fait le lien entre les méthodes du controller et les éléments de view.
+	 * @param  {function} (event)   L' évenement actif.
+	 * @param  {function} (handler) Un callback exécuté sous condition.
+	 */
 	View.prototype.bind = function (event, handler) {
 		var self = this;
 		if (event === 'newTodo') {
+			/**
+			 * $on : ajoute eventListener.
+			 * passe self.$newTodo.value au handler (contenu de l'input).
+			 */
 			$on(self.$newTodo, 'change', function () {
 				handler(self.$newTodo.value);
 			});
