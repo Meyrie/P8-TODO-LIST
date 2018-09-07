@@ -26,7 +26,8 @@
 
 	/**
 	 * Sets up defaults for all the Template methods such as a default template
-	 *
+	* Définit les valeurs par défaut du template
+
 	 * @constructor
 	 */
 	function Template() {
@@ -42,13 +43,15 @@
 
 	/**
 	 * Creates an <li> HTML string and returns it for placement in your app.
-	 *
+	 * Créé une chaîne HTML <li> et la retourne pour la placer dans l'application.
 	 * NOTE: In real life you should be using a templating engine such as Mustache
 	 * or Handlebars, however, this is a vanilla JS example.
 	 *
 	 * @param {object} data The object containing keys you want to find in the
-	 *                      template to replace.
-	 * @returns {string} HTML String of an <li> element
+	 *                      template to replace. 
+	 * 						L'objet contenant les clés que vous souhaitez trouver
+	 *                      dans le modèle à remplacer.
+	 * @returns {string} HTML String of an <li> element.Template HTML correspondant à l' élément <li>
 	 *
 	 * @example
 	 * view.show({
@@ -84,9 +87,9 @@
 
 	/**
 	 * Displays a counter of how many to dos are left to complete
-	 *
-	 * @param {number} activeTodos The number of active todos.
-	 * @returns {string} String containing the count
+	 * Affiche un compteur du nombre de tâches à terminer.
+	 * @param {number} activeTodos The number of active todos. Le nombre de todos actifs.
+	 * @returns {string} String containing the count. Chaîne contenant le nombre.
 	 */
 	Template.prototype.itemCounter = function (activeTodos) {
 		var plural = activeTodos === 1 ? '' : 's';
@@ -96,9 +99,9 @@
 
 	/**
 	 * Updates the text within the "Clear completed" button
-	 *
-	 * @param  {[type]} completedTodos The number of completed todos.
-	 * @returns {string} String containing the count
+	 * Met à jour le texte dans le bouton "Clear completed".
+	 * @param  {[type]} completedTodos The number of completed todos.  Le nombre de todos complétés.
+	 * @returns {string} String containing the count. Chaîne contenant le nombre.
 	 */
 	Template.prototype.clearCompletedButton = function (completedTodos) {
 		if (completedTodos > 0) {
