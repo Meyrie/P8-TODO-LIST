@@ -88,14 +88,6 @@
 		callback = callback || function () {};
 
 		
-		// Generate an ID. Génrérer un id unique.
-		var	newId = ""
-	    var d = new Date(); 
-
-        for (var i = 0; i < 6; i++) {
-     		newId += d.getTime();
-		}
-console.log(newId)
 		// If an ID was actually given, find the item and update each property
 		// Si un ID a été donné, trouve l'élément et met à jour les propriétés
 		if (id) {
@@ -112,8 +104,9 @@ console.log(newId)
 			callback.call(this, todos);
 		} else {
 
-    		// Assign an ID
-			updateData.id = parseInt(newId);
+    		// Assign an ID. Génrérer un id unique.
+			updateData.id =  Date.now();
+			console.log(updateData.id)
     
 
 			todos.push(updateData);
