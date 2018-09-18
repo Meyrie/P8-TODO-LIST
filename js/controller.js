@@ -12,7 +12,8 @@
 		var self = this;
 		self.model = model;
 		self.view = view;
-
+		// La fonction bind() crée une nouvelle fonction qui, lorsqu'elle est appelée,
+		// a pour contexte this la valeur passée en paramètre
 		self.view.bind('newTodo', function (title) {
 			self.addItem(title);
 		});
@@ -175,7 +176,6 @@
 
 		items.forEach(function(item) {
 			if (item.id === id) {
-				console.log("Element with ID: " + id + " has been removed.");
 			}
 		});
 
