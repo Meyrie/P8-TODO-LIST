@@ -39,7 +39,7 @@
 	 *	 // data will return any items that have foo: bar and
 	 *	 // hello: world in their properties
 	 * });
-	 *   données retournera tous les éléments qui ont foo: bar et
+	 *    retournera tous les éléments qui ont foo: bar et
 	 *	 hello: world dans leurs propriétés
 	 */
 	Store.prototype.find = function (query, callback) {
@@ -124,16 +124,10 @@
 	Store.prototype.remove = function (id, callback) {
 		var data = JSON.parse(localStorage[this._dbName]);
 		var todos = data.todos;
-		var todoId;
 		
-		for (var i = 0; i < todos.length; i++) {
-			if (todos[i].id == id) {
-				todoId = todos[i].id;
-			}
-		}
 
 		for (var i = 0; i < todos.length; i++) {
-			if (todos[i].id == todoId) {
+			if (todos[i].id == id) {
 				todos.splice(i, 1);
 			}
 		}
